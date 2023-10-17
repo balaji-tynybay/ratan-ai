@@ -39,9 +39,6 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-          task-definition: ${{ aws_ecs_task_definition.app_task.arn }}
-          service: app-cluster
-          cluster: app-repo
-          wait-for-service-stability: true
+      run: |
+        aws ecs update-service --cluster app-cluster --service app-service --force-new-deployment --region us-west-2 --task-definition app-task1 --no-cli-pager
+
